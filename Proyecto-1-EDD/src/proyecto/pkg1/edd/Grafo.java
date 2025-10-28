@@ -12,7 +12,7 @@ public class Grafo {
     private boolean dirigido;
     private int numnodos;
     private int maxnodos;
-    //aqui va la lista general
+    //aqui va la lista general CREAR ARRAY LIST, LISTA DE ARREGLOS
             
    
 //CONSTRUCTORES 
@@ -63,8 +63,7 @@ public class Grafo {
      */
     public void setMaxnodos(int maxnodos) {
         this.maxnodos = maxnodos;
-    }
+     }
+}   
     
-
-
-    
+  
