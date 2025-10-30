@@ -4,11 +4,14 @@
  */
 package proyecto.pkg1.edd;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author a-utr
  */
 public class Interfaz2 extends javax.swing.JFrame {
+    private JFrame ventanaAnterior;
 
     /**
      * Creates new form Interfaz2
@@ -16,6 +19,10 @@ public class Interfaz2 extends javax.swing.JFrame {
     public Interfaz2() {
         initComponents();
     }
+    public Interfaz2(JFrame ventanaAnterior) {
+    initComponents();
+    this.ventanaAnterior = ventanaAnterior; // Guarda la ventana
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,11 +37,11 @@ public class Interfaz2 extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jTextField3 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -50,23 +57,39 @@ public class Interfaz2 extends javax.swing.JFrame {
                 jTextField1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 140, -1));
+        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 40, 150, -1));
 
-        jButton1.setText("Agregar Usuario");
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 140, -1));
-        jPanel2.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 40, 110, -1));
+        jButton1.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
+        jButton1.setText("👤 Agregar Usuario");
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 160, -1));
 
-        jButton2.setText("Eliminar Usuario");
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, -1, -1));
+        jButton2.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
+        jButton2.setText("➖ Eliminar Usuario");
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, 150, -1));
 
+        jButton3.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         jButton3.setText("Crear Relacion");
-        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 130, -1, -1));
+        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 120, -1));
 
+        jButton4.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         jButton4.setText("Mostrar Grafo");
-        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 170, -1, -1));
+        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 180, 120, -1));
 
+        jButton5.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         jButton5.setText("Volver");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         jPanel2.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 160, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 440, 260));
 
@@ -78,6 +101,18 @@ public class Interfaz2 extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+
+    if (this.ventanaAnterior != null) {
+        this.ventanaAnterior.setVisible(true);
+    }
+    this.dispose();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,6 +158,6 @@ public class Interfaz2 extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }

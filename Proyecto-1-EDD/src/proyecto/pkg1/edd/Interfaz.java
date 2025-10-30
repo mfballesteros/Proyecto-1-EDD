@@ -4,8 +4,12 @@
  */
 package proyecto.pkg1.edd;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -13,6 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author a-utr
  */
 public class Interfaz extends javax.swing.JFrame {
+   
 
     /**
      * Creates new form Interfaz
@@ -36,9 +41,11 @@ public class Interfaz extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         botoncargararchivo = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(215, 235, 255));
@@ -56,27 +63,44 @@ public class Interfaz extends javax.swing.JFrame {
                 jTextField1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 390, 30));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 390, 30));
 
-        jLabel2.setText("Para iniciar agregue el archivo que desea analizar   ️➡");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, -1, 30));
+        jLabel2.setText("️➡");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, 30, 30));
 
+        botoncargararchivo.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         botoncargararchivo.setText("Cargar Archivo 📁");
         botoncargararchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botoncargararchivoActionPerformed(evt);
             }
         });
-        jPanel1.add(botoncargararchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, -1, 30));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 390, 220));
+        jPanel1.add(botoncargararchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 60, -1, 40));
 
+        jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         jLabel1.setText("¡Bienvenido! ");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, -1, -1));
 
+        jButton1.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         jButton1.setText("Continuar");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, -1, -1));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 391, -1, 30));
 
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 480, 440));
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 390, 200));
+
+        jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jLabel3.setText("Para iniciar agregue el archivo que desea analizar  ");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, 30));
+
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 500, 450));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, 490));
 
@@ -98,8 +122,53 @@ public class Interfaz extends javax.swing.JFrame {
         if (f != null){
             String filename=f.getAbsolutePath();
             jTextField1.setText(filename);
+            
+            try (BufferedReader reader = new BufferedReader(new FileReader(f))) {
+            StringBuilder contenido = new StringBuilder();
+            String linea;
+
+            while ((linea = reader.readLine()) != null) {
+                contenido.append(linea).append("\n"); 
+            }
+
+            jTextArea1.setText(contenido.toString());
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            jTextArea1.setText(""); 
+            jTextField1.setText("");
+        }
         }  
     }//GEN-LAST:event_botoncargararchivoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+String rutaArchivo = jTextField1.getText();
+    if (rutaArchivo.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Por favor, cargue un archivo antes de continuar.",
+            "Error: No hay archivo",
+            JOptionPane.ERROR_MESSAGE
+        );
+        return; 
+    } 
+        
+int resultado = JOptionPane.showConfirmDialog(
+    this, 
+    "El archivo ha sido guardado exitosamente. ¿Desea continuar ?", 
+    "Guardado", 
+    JOptionPane.OK_CANCEL_OPTION, 
+    JOptionPane.INFORMATION_MESSAGE 
+);
+
+if (resultado == JOptionPane.OK_OPTION) {
+    Interfaz2 siguientePagina = new Interfaz2(this);
+    siguientePagina.setVisible(true);
+    this.setVisible(false);
+} else {
+   
+}
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -142,9 +211,11 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
