@@ -10,17 +10,20 @@ package proyecto.pkg1.edd;
  */
 public class Grafo {
     private boolean dirigido;
-    private int numnodos;
-    private int maxnodos;
+    private int numVertices;
+    private int maxNodos;
+    private ListaAdyacencia [] listaAd;
     //aqui va la lista general CREAR ARRAY LIST, LISTA DE ARREGLOS
             
    
 //CONSTRUCTORES 
 
-    public Grafo(boolean dirigido, int numnodos, int maxnodos) {
+    public Grafo(boolean dirigido, int n) {
         this.dirigido = dirigido;
-        this.numnodos = 0;
-        this.maxnodos = 100;
+        this.numVertices = 0; // cuando creas el grafo vacio
+        this.maxNodos = n;
+        this.listaAd = new ListaAdyacencia [n]; //el tamano del array sera la cantidad max de nodos
+        //cada indice del array es un vertice
     }
 
     /**
@@ -38,32 +41,45 @@ public class Grafo {
     }
 
     /**
-     * @return the numnodos
+     * @return the numVertices
      */
-    public int getNumnodos() {
-        return numnodos;
+    public int getNumVertices() {
+        return numVertices;
     }
 
     /**
-     * @param numnodos the numnodos to set
+     * @param numVertices the numVertices to set
      */
-    public void setNumnodos(int numnodos) {
-        this.numnodos = numnodos;
+    public void setNumVertices(int numVertices) {
+        this.numVertices = numVertices;
     }
 
     /**
-     * @return the maxnodos
+     * @return the maxNodos
      */
-    public int getMaxnodos() {
-        return maxnodos;
+    public int getMaxNodos() {
+        return maxNodos;
     }
 
     /**
-     * @param maxnodos the maxnodos to set
+     * @param maxNodos the maxNodos to set
      */
-    public void setMaxnodos(int maxnodos) {
-        this.maxnodos = maxnodos;
-     }
-}   
+    public void setMaxNodos(int maxNodos) {
+        this.maxNodos = maxNodos;
+    }
+
+    /**
+     * @return the listaAd
+     */
+    public ListaAdyacencia[] getListaAd() {
+        return listaAd;
+    }
+
+    /**
+     * @param listaAd the listaAd to set
+     */
+    public void setListaAd(ListaAdyacencia[] listaAd) {
+        this.listaAd = listaAd;
+    }
+
     
-  
