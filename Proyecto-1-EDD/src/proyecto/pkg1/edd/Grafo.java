@@ -26,6 +26,38 @@ public class Grafo {
         //cada indice del array es un vertice
     }
 
+    public void insertarVertice (int n){
+        if (n < 0 || n >= maxNodos) { // comprobando max cantidad de nodos
+            System.out.println("Error, se supera el numero de nodos maximo dentro del grafo");
+        }else {
+            for (int i = numVertices; i < numVertices + n; i++) { // agregar el vertice
+                listaAd[i] = new ListaAdyacencia();
+            }
+            numVertices += n;
+        }   
+    }
+    
+    public void insertarArista(int i, int j) { // se toman dos elementos, i como el primero y j con el que se quiere relacionar
+        if (i<0 || j <0 || i >= numVertices || j >= numVertices) { // si estan fuera de los vertices que existen
+            System.out.println("Error, vértice no válido");
+            return;
+        }
+        listaAd[i].insertarFinal(j);
+        if (!dirigido) listaAd[j].insertarFinal(i); // si no es dirigido agregas tambien a j la relacion con i 
+    }
+    
+    public void eliminarArista (int i, int j){
+        if (i<0 || j <0 || i >= numVertices || j >= numVertices){
+            System.out.println("Error, vertice no valido");
+            return;
+        }else{
+           // boolean eliminado = listaAd[i].METODO ELIMINAR NODO ESPECIFICO Nodo(j);
+        //if (!dirigido) listaAd[j].eliminar(i); CAMBIAMOS SI NO ES DIRIGIDO
+        }
+
+    }
+    
+
     /**
      * @return the dirigido
      */
@@ -81,5 +113,6 @@ public class Grafo {
     public void setListaAd(ListaAdyacencia[] listaAd) {
         this.listaAd = listaAd;
     }
+}
 
     
