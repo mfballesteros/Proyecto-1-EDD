@@ -141,7 +141,64 @@ public class ListaAdyacencia <T> {
         System.out.println(" ]");
     }
     
+    // Metodo para borrar un elemento x de la lista
     
+    public void eliminarElem (T dato){
+        if (esVacio()){
+            return;
+        }
+        
+        Nodo <T> actual = head;
+        Nodo <T> anterior = null;
+        
+        if (actual.getData().equals(dato)){
+            eliminarInicio();
+            return;
+        }
+       
+        while(actual != null && !actual.getData().equals(dato)){
+            anterior = actual;
+            actual = actual.getNextNodo();
+        }
+        
+        if (actual == null){
+            return; // dato no encontrado
+        }
+        
+        if (actual == tail){
+            eliminarFinal();
+            return;
+        }
+        
+        anterior.setNextNodo(actual.getNextNodo());
+        tamaño--;
+    }
+    
+    // Metodo recorrer la lista
+    public void recorrer() {
+        Nodo<T> actual = head;
+
+        while (actual != null) {
+            actual = actual.getNextNodo(); // avanzar
+        }
+    }
+    
+    // Metodo buscar un dato de la lista
+    
+    public Nodo<T> buscar(T dato) {
+        Nodo<T> actual = head;
+
+        while (actual != null) {
+            if (actual.getData().equals(dato)) {
+                return actual; 
+            }
+            actual = actual.getNextNodo();
+        }
+
+        return null; // No encontrado
+    }
+
+
    }
    
 

@@ -38,7 +38,7 @@ public class Grafo {
     }
     
     public void insertarArista(int i, int j) { // se toman dos elementos, i como el primero y j con el que se quiere relacionar
-        if (i<0 || j <0 || i >= numVertices || j >= numVertices) { // si estan fuera de los vertices que existen
+        if (i<0 || j <0 || i >= maxNodos || j >= maxNodos) { // si estan fuera de los vertices que existen
             System.out.println("Error, vértice no válido");
             return;
         }
@@ -46,17 +46,42 @@ public class Grafo {
         if (!dirigido) listaAd[j].insertarFinal(i); // si no es dirigido agregas tambien a j la relacion con i 
     }
     
-    public void eliminarArista (int i, int j){
-        if (i<0 || j <0 || i >= numVertices || j >= numVertices){
+    public void eliminarArista (int i, int j){ //eliminando relaciones
+        if (i<0 || j <0 || i >= maxNodos || j >= maxNodos){
             System.out.println("Error, vertice no valido");
             return;
-        }else{
-           // boolean eliminado = listaAd[i].METODO ELIMINAR NODO ESPECIFICO Nodo(j);
-        //if (!dirigido) listaAd[j].eliminar(i); CAMBIAMOS SI NO ES DIRIGIDO
+        }
+        
+        if (listaAd[i] == null || listaAd[j] == null) { // esta validacion se hace para verificar si el elemento ya fue eliminado
+        System.out.println("Error, el vértice " + i + " o " + j + " no existe (fue eliminado).");
+        return;
         }
 
-    }
+        listaAd[i].eliminarElem(j);
+        if (!dirigido) listaAd[j].eliminarElem(i);
+        }
     
+    public void eliminarVertice (int i) { //eliminando usuarios
+        if (i < 0 || i >= maxNodos || listaAd [i] == null) {
+            return; }
+        for (int x = 0; x < maxNodos; x++) {
+            if (listaAd[x] != null) {
+                listaAd[x].eliminarElem(i);
+            }
+        }
+        listaAd[i] = null;  
+        numVertices--;
+    }
+ 
+    
+    public void imprimirGrafo (int numVertices, int maxNodos){
+        System.out.println("El grafo todavia tiene" + maxNodos + "nodos a utilizar");
+        System.out.println("En el grafo existen" + numVertices + "usuarios registrados");
+        for (int i = 0; i < maxNodos; i++) {
+            System.out.print("Vértice " + i + ": ");
+            listaAd[i].mostrarLista();
+        }
+    }
 
     /**
      * @return the dirigido
