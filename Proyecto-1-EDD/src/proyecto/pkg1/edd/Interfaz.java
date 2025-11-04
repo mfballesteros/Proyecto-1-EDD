@@ -8,16 +8,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 /**
  *
  * @author a-utr
  */
 public class Interfaz extends javax.swing.JFrame {
-   
+    private ArrayList<String> listaUsuarios = new ArrayList<>();
+    private ArrayList<String> listaRelaciones = new ArrayList<>();
 
     /**
      * Creates new form Interfaz
@@ -44,7 +47,7 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtContenido = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -66,7 +69,7 @@ public class Interfaz extends javax.swing.JFrame {
         jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 390, 30));
 
         jLabel2.setText("️➡");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, 30, 30));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 30, 30));
 
         botoncargararchivo.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         botoncargararchivo.setText("Cargar Archivo 📁");
@@ -75,11 +78,11 @@ public class Interfaz extends javax.swing.JFrame {
                 botoncargararchivoActionPerformed(evt);
             }
         });
-        jPanel1.add(botoncargararchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 60, -1, 40));
+        jPanel1.add(botoncargararchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 70, -1, 30));
 
-        jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         jLabel1.setText("¡Bienvenido! ");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, -1, -1));
 
         jButton1.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         jButton1.setText("Continuar");
@@ -88,21 +91,21 @@ public class Interfaz extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 391, -1, 30));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, -1, 30));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtContenido.setColumns(20);
+        txtContenido.setRows(5);
+        jScrollPane1.setViewportView(txtContenido);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 390, 200));
 
         jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel3.setText("Para iniciar agregue el archivo que desea analizar  ");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, 30));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, 30));
 
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 500, 450));
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 500, 450));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, 490));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -112,33 +115,74 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void botoncargararchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoncargararchivoActionPerformed
-        JFileChooser chooser =new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Texto(.txt)","txt");
-        chooser.setFileFilter(filter);
-        chooser.setAcceptAllFileFilterUsed(false);
-        chooser.showOpenDialog(null);
-        File f =chooser.getSelectedFile();
+JFileChooser chooser = new JFileChooser();
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Texto(.txt)", "txt");
+    chooser.setFileFilter(filter);
+    chooser.setAcceptAllFileFilterUsed(false);
+    chooser.showOpenDialog(null);
+    File f = chooser.getSelectedFile();
+
+    if (f != null) {
+        String filename = f.getAbsolutePath();
         
-        if (f != null){
-            String filename=f.getAbsolutePath();
-            jTextField1.setText(filename);
-            
-            try (BufferedReader reader = new BufferedReader(new FileReader(f))) {
-            StringBuilder contenido = new StringBuilder();
+        jTextField1.setText(filename); 
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(f))) {
+ 
+            this.listaUsuarios.clear();
+            this.listaRelaciones.clear();
+
+            String modo = "ninguno";
             String linea;
+            StringBuilder contenidoParaMostrar = new StringBuilder(); // Para el JTextArea
 
             while ((linea = reader.readLine()) != null) {
-                contenido.append(linea).append("\n"); 
+
+                String lineaLimpia = linea.trim().toLowerCase(); 
+
+                if (lineaLimpia.isEmpty()) {
+                    continue; 
+                }
+
+                if (lineaLimpia.contains("usuario") || lineaLimpia.contains("user")) { 
+                    modo = "usuarios";
+                    contenidoParaMostrar.append("--- USUARIOS ---\n");
+                    continue; 
+                } else if (lineaLimpia.contains("relacion") || lineaLimpia.contains("relation")) {
+                    modo = "relaciones";
+                    contenidoParaMostrar.append("\n--- RELACIONES ---\n");
+                    continue;
+                }
+
+                String dato = linea.trim();
+                //System.out.println(dato);
+                
+                if (modo.equals("usuarios")) {
+                    this.listaUsuarios.add(dato);
+                    contenidoParaMostrar.append(dato).append("\n");
+                    
+                } else if (modo.equals("relaciones")) {
+                    this.listaRelaciones.add(dato);
+                    contenidoParaMostrar.append(dato).append("\n");
+                }
             }
 
-            jTextArea1.setText(contenido.toString());
+            txtContenido.setText(contenidoParaMostrar.toString());
+
+            System.out.println("Usuarios cargados en memoria: " + this.listaUsuarios);
+            System.out.println("Relaciones cargadas en memoria: " + this.listaRelaciones);
+
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            jTextArea1.setText(""); 
+
+            txtContenido.setText(""); 
             jTextField1.setText("");
+            this.listaUsuarios.clear();
+            this.listaRelaciones.clear();
         }
-        }  
+      }
+
     }//GEN-LAST:event_botoncargararchivoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -215,7 +259,7 @@ if (resultado == JOptionPane.OK_OPTION) {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextArea txtContenido;
     // End of variables declaration//GEN-END:variables
 }
