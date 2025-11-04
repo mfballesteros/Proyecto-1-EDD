@@ -29,22 +29,36 @@ public class Grafo {
     public void insertarVertice (int n){
         if (n < 0 || n >= maxNodos) { // comprobando max cantidad de nodos
             System.out.println("Error, se supera el numero de nodos maximo dentro del grafo");
-        }else {
-            for (int i = numVertices; i < numVertices + n; i++) { // agregar el vertice
-                listaAd[i] = new ListaAdyacencia();
-            }
-            numVertices += n;
-        }   
+            return;
+        }
+        if (listaAd[n] != null) {
+            System.out.println("Error: El vértice " + n + " ya existe.");
+            return;
+        }
+       
+        listaAd[n] = new ListaAdyacencia();
+        numVertices ++;
     }
+    
     
     public void insertarArista(int i, int j) { // se toman dos elementos, i como el primero y j con el que se quiere relacionar
         if (i<0 || j <0 || i >= maxNodos || j >= maxNodos) { // si estan fuera de los vertices que existen
             System.out.println("Error, vértice no válido");
             return;
         }
+        if (listaAd[i] == null || listaAd[j] == null) {
+            System.out.println("Error: Vértice " + i + " o " + j + " no existe (fue eliminado).");
+        
+        return;
+        
+        }
+        
+        
         listaAd[i].insertarFinal(j);
         if (!dirigido) listaAd[j].insertarFinal(i); // si no es dirigido agregas tambien a j la relacion con i 
-    }
+    
+        }
+    
     
     public void eliminarArista (int i, int j){ //eliminando relaciones
         if (i<0 || j <0 || i >= maxNodos || j >= maxNodos){
@@ -61,6 +75,8 @@ public class Grafo {
         if (!dirigido) listaAd[j].eliminarElem(i);
         }
     
+    
+    
     public void eliminarVertice (int i) { //eliminando usuarios
         if (i < 0 || i >= maxNodos || listaAd [i] == null) {
             return; }
@@ -74,15 +90,25 @@ public class Grafo {
     }
  
     
-    public void imprimirGrafo (int numVertices, int maxNodos){
+    
+    
+    public void imprimirGrafo (){
         System.out.println("El grafo todavia tiene" + maxNodos + "nodos a utilizar");
         System.out.println("En el grafo existen" + numVertices + "usuarios registrados");
         for (int i = 0; i < maxNodos; i++) {
-            System.out.print("Vértice " + i + ": ");
-            listaAd[i].mostrarLista();
+            if (listaAd[i] != null) {
+                System.out.print("Vértice " + i + ": ");
+                listaAd[i].mostrarLista(); 
+        } else {
+            System.out.println("Vértice " + i + "vacio");
         }
     }
 
+    
+    
+    
+    
+    }
     /**
      * @return the dirigido
      */
@@ -105,26 +131,11 @@ public class Grafo {
     }
 
     /**
-     * @param numVertices the numVertices to set
-     */
-    public void setNumVertices(int numVertices) {
-        this.numVertices = numVertices;
-    }
-
-    /**
      * @return the maxNodos
      */
     public int getMaxNodos() {
         return maxNodos;
     }
-
-    /**
-     * @param maxNodos the maxNodos to set
-     */
-    public void setMaxNodos(int maxNodos) {
-        this.maxNodos = maxNodos;
-    }
-
     /**
      * @return the listaAd
      */
@@ -132,12 +143,6 @@ public class Grafo {
         return listaAd;
     }
 
-    /**
-     * @param listaAd the listaAd to set
-     */
-    public void setListaAd(ListaAdyacencia[] listaAd) {
-        this.listaAd = listaAd;
-    }
 }
 
     
