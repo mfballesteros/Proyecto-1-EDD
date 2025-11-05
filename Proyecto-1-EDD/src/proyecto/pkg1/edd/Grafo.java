@@ -12,36 +12,60 @@ public class Grafo {
     private boolean dirigido;
     private int numVertices;
     private int maxNodos;
-    private ListaAdyacencia [] listaAd;
-    //aqui va la lista general CREAR ARRAY LIST, LISTA DE ARREGLOS
+    private ListaAdyacencia [] listaAd; //aqui va la lista general CREAR ARRAY LIST, LISTA DE ARREGLOS
+    private String [] nombres; //creando un arreglo de strings
+   
             
    
 //CONSTRUCTORES 
 
     public Grafo(boolean dirigido, int n) {
-        this.dirigido = dirigido;
+        this.dirigido = true;
         this.numVertices = 0; // cuando creas el grafo vacio
         this.maxNodos = n;
         this.listaAd = new ListaAdyacencia [n]; //el tamano del array sera la cantidad max de nodos
         //cada indice del array es un vertice
+        this.nombres = new String[n]; // creando una lista paralela
     }
 
-    public void insertarVertice (int n){
-        if (n < 0 || n >= maxNodos) { // comprobando max cantidad de nodos
+    public void insertarVertice (String nombre){
+        if (accederIndice(nombre) != -1) {
+            System.out.println("Error: el vértice '" + nombre + "' ya existe.");
+            return;
+    }
+        if (numVertices >= maxNodos) { // comprobando max cantidad de nodos
             System.out.println("Error, se supera el numero de nodos maximo dentro del grafo");
-            return;
+            return; 
         }
-        if (listaAd[n] != null) {
-            System.out.println("Error: El vértice " + n + " ya existe.");
-            return;
-        }
-       
-        listaAd[n] = new ListaAdyacencia();
-        numVertices ++;
+        
+        listaAd[numVertices] = new ListaAdyacencia();
+        nombres[numVertices] = nombre;
+        numVertices++;
     }
     
     
-    public void insertarArista(int i, int j) { // se toman dos elementos, i como el primero y j con el que se quiere relacionar
+    
+    public int accederIndice (String nombre){
+        for (int i = 0; i < maxNodos; i++ ){
+             if (nombres[i] != null && nombres[i].equals(nombre)) {
+                 return i;
+             }
+        }
+        return -1;
+        
+        
+    }
+    
+    
+    public int obtenerIdUsuario(String nombre) {
+        return accederIndice(nombre);
+    }
+    
+    
+    public void insertarArista(String primero, String segundo) { // se toman dos elementos, i como el primero y j con el que se quiere relacionar
+        int i = accederIndice(primero);
+        int j = accederIndice(segundo);
+
         if (i<0 || j <0 || i >= maxNodos || j >= maxNodos) { // si estan fuera de los vertices que existen
             System.out.println("Error, vértice no válido");
             return;
@@ -55,12 +79,17 @@ public class Grafo {
         
         
         listaAd[i].insertarFinal(j);
-        if (!dirigido) listaAd[j].insertarFinal(i); // si no es dirigido agregas tambien a j la relacion con i 
+        if (!dirigido){
+            listaAd[j].insertarFinal(i);
+        } // si no es dirigido agregas tambien a j la relacion con i 
     
         }
     
     
-    public void eliminarArista (int i, int j){ //eliminando relaciones
+    public void eliminarArista (String primero,String segundo){ //eliminando relaciones
+        int i = accederIndice(primero);
+        int j = accederIndice(segundo);
+        
         if (i<0 || j <0 || i >= maxNodos || j >= maxNodos){
             System.out.println("Error, vertice no valido");
             return;
@@ -77,7 +106,8 @@ public class Grafo {
     
     
     
-    public void eliminarVertice (int i) { //eliminando usuarios
+    public void eliminarVertice (String nom) { //eliminando usuarios
+        int i = accederIndice(nom);
         if (i < 0 || i >= maxNodos || listaAd [i] == null) {
             return; }
         for (int x = 0; x < maxNodos; x++) {
@@ -86,38 +116,51 @@ public class Grafo {
             }
         }
         listaAd[i] = null;  
-        numVertices--;
+        nombres [i] = null;
     }
  
-    
     
     
     public void imprimirGrafo (){
         System.out.println("El grafo todavia tiene" + maxNodos + "nodos a utilizar");
         System.out.println("En el grafo existen" + numVertices + "usuarios registrados");
-        for (int i = 0; i < maxNodos; i++) {
-            if (listaAd[i] != null) {
-                System.out.print("Vértice " + i + ": ");
-                listaAd[i].mostrarLista(); 
-        } else {
-            System.out.println("Vértice " + i + "vacio");
+        for (int i = 0; i < numVertices; i++) {
+            if (nombres[i] != null && listaAd[i] != null) {
+                System.out.print("User " + nombres[i] + ": [ ");  
+                boolean primeraRelacion = true;
+                for (int j = 0; j < numVertices; j++) {
+                    if (nombres[j] != null && listaAd[i].buscar(j) != null) { 
+                        if (!primeraRelacion) {
+                        System.out.print(" , ");
+                    }
+                    System.out.print("" + nombres[j]);
+                    primeraRelacion = false;
+                }
+            }
+            System.out.println(" ]");
         }
-    }
+     }        
+
+
+            for (int i = numVertices; i < maxNodos; i++) {
+                System.out.println("Vértice " + i + " vacío");
+                }
+        }
 
     
+
     
+     //no se requieren usar los sets para num vertice y maxnodos al ser una cantidad definida desde el inicio, y no modificable.
     
-    
-    }
     /**
-     * @return the dirigido
+     * @return the 
      */
     public boolean isDirigido() {
         return dirigido;
     }
 
     /**
-     * @param dirigido the dirigido to set
+     * @param dirigido the to set
      */
     public void setDirigido(boolean dirigido) {
         this.dirigido = dirigido;
@@ -143,6 +186,15 @@ public class Grafo {
         return listaAd;
     }
 
+    /**
+     * @return the 
+     */
+    public String[] getNombres() {
+        return nombres;
+    }
+
+    
+    
 }
 
     

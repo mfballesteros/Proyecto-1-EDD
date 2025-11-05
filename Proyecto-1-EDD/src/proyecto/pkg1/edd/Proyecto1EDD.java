@@ -14,35 +14,43 @@ public class Proyecto1EDD {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    System.out.println("--- PRUEBA DE GRAFO ---");
-    Grafo g = new Grafo(true, 5); // Grafo dirigido de 5 nodos
-
-    System.out.println("\n--- 1. Insertar Vértices 0, 1, 3 ---");
-    g.insertarVertice(0);
-    g.insertarVertice(1);
-    g.insertarVertice(3);
-    g.imprimirGrafo();
-
-    System.out.println("\n--- 2. Insertar Aristas 0->1, 1->3, 3->0 ---");
-    g.insertarArista(0, 1);
-    g.insertarArista(1, 3);
-    g.insertarArista(3, 0);
-    g.imprimirGrafo();
-
-    System.out.println("\n--- 3. Eliminar Arista 1->3 ---");
-    g.eliminarArista(1, 3);
-    g.imprimirGrafo();
-
-    System.out.println("\n--- 4. Eliminar Vértice 3 ---");
-    // (Esto debe borrar el vértice 3 y la arista 3->0)
-    g.eliminarVertice(3);
-    g.imprimirGrafo();
-
-    System.out.println("\n--- 5. Prueba de Error (Insertar en Vértice 3 eliminado) ---");
-    // (Esto debe imprimir tu error "no existe")
-    g.insertarArista(0, 3);
+    System.out.println("=== PRUEBA DEL SISTEMA ===");
     
-    System.out.println("\n--- PRUEBA FINALIZADA ---");
-    }
+    Grafo redSocial = new Grafo(true, 10);
     
+    System.out.println("1. Insertando usuarios...");
+    redSocial.insertarVertice("@ana");
+    redSocial.insertarVertice("@carlos");
+    redSocial.insertarVertice("@laura");
+    redSocial.insertarVertice("@pedro");
+    redSocial.insertarVertice("@marta");
+    
+    System.out.println("\n--- GRAFO ORIGINAL ---");
+    redSocial.imprimirGrafo();
+    
+    System.out.println("2. Creando relaciones...");
+    redSocial.insertarArista("@ana", "@carlos");
+    redSocial.insertarArista("@carlos", "@laura");
+    redSocial.insertarArista("@laura", "@pedro");
+    redSocial.insertarArista("@pedro", "@marta");
+    redSocial.insertarArista("@marta", "@ana");
+    
+    System.out.println("\n--- GRAFO ORIGINAL ---");
+    redSocial.imprimirGrafo();
+    
+    System.out.println("\n--- ELIMINANDO ARISTA @pedro - @marta ---");
+    redSocial.eliminarArista("@pedro", "@marta");
+    redSocial.imprimirGrafo();
+
+    System.out.println("\n--- ELIMINANDO VÉRTICE @ana ---");
+    redSocial.eliminarVertice("@ana");
+    redSocial.imprimirGrafo();
+    
+    redSocial.eliminarArista("@pedro", "@marta");
+    redSocial.eliminarVertice("@ana");
+
+    
+  }
+    
+
 }
