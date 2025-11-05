@@ -78,11 +78,11 @@ public class Interfaz2 extends javax.swing.JFrame {
         jButton3.setText("Crear Relacion");
         jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 120, -1));
 
-        jButton4.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
+        jButton4.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton4.setText("Mostrar Grafo");
-        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 120, -1));
+        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 280, 140, -1));
 
-        jButton5.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
+        jButton5.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jButton5.setText("Volver");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -106,7 +106,7 @@ public class Interfaz2 extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel2.setText("Crear Relaciones:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
         jPanel2.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 140, -1, -1));
 
         jSeparator2.setForeground(new java.awt.Color(0, 0, 102));
@@ -126,7 +126,10 @@ public class Interfaz2 extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
-
+/**
+     * Gestiona el evento de clic del botón "Volver"
+     * @param evt Objeto que encapsula la información del evento.
+     */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
 
     if (this.ventanaAnterior != null) {

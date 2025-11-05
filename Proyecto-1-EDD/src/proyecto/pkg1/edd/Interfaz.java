@@ -49,6 +49,7 @@ public class Interfaz extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtContenido = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(215, 235, 255));
@@ -66,7 +67,7 @@ public class Interfaz extends javax.swing.JFrame {
                 jTextField1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 390, 30));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, 390, 30));
 
         jLabel2.setText("️➡");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 30, 30));
@@ -84,26 +85,30 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel1.setText("¡Bienvenido! ");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, -1, -1));
 
-        jButton1.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton1.setText("Continuar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, -1, 30));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, -1, 30));
 
         txtContenido.setColumns(20);
         txtContenido.setRows(5);
         jScrollPane1.setViewportView(txtContenido);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 390, 200));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 390, 200));
 
         jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel3.setText("Para iniciar agregue el archivo que desea analizar  ");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, 30));
 
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 500, 450));
+        jSeparator1.setBackground(new java.awt.Color(0, 0, 102));
+        jSeparator1.setForeground(new java.awt.Color(0, 0, 102));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 480, 10));
+
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 500, 460));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 500));
 
@@ -113,7 +118,13 @@ public class Interfaz extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
-
+/**
+     * Boton "Cargar Archivo"
+     * Abre un JFileChooser para seleccionar un archivo de texto
+     * Lee el archivo línea por línea y clasifica el contenido.
+     * Actualiza el JTextArea y txtContenido con el texto formateado
+     * @param evt Evento de accion que activa este metodo
+     */
     private void botoncargararchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoncargararchivoActionPerformed
 JFileChooser chooser = new JFileChooser();
     FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Texto(.txt)", "txt");
@@ -184,7 +195,14 @@ JFileChooser chooser = new JFileChooser();
       }
 
     }//GEN-LAST:event_botoncargararchivoActionPerformed
-
+/**
+     * Gestiona el botón "Continuar"
+     * Verifica si se ha cargado un archivo comprobando el contenido
+     * Si ya existe un archivo, muestra un diálogo de confirmación
+     * Se pasa la instancia actual al constructor de para permitir la funcionalidad de "Volver"
+     * Oculta esta ventana actual para preservar el estado de los datos cargados.
+     * @param evt Evento de accion generado por el boton
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 String rutaArchivo = jTextField1.getText();
     if (rutaArchivo.trim().isEmpty()) {
@@ -259,6 +277,7 @@ if (resultado == JOptionPane.OK_OPTION) {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextArea txtContenido;
     // End of variables declaration//GEN-END:variables
