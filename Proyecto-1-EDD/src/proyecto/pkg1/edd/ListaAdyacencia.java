@@ -5,7 +5,9 @@
 package proyecto.pkg1.edd;
 
 /**
- *
+ * Clase que define una lista simplemente enlazada, genérica, usara para implementar grafos
+ * Mantiene los nodos vecinos de un vértice
+ * @param <T> El tipo de dato de los elementos
  * @author bettinacarnevali
  */
 public class ListaAdyacencia <T> {
@@ -25,14 +27,22 @@ public class ListaAdyacencia <T> {
       
    }
    
-   //Metodo que evalua si la lista está vacía
+    /**
+     * Metodo que evalua si la lista esta vacia
+     * @return valor logico de si la lista esta vacia
+     */
    
    public boolean esVacio() {
        return head == null;
       
      }
    
-   // Metodo insertar al principio de la lista
+   /**Metodo insertar al principio de la lista
+    * 
+    * @param dato El elemento a añadir 
+    */
+   
+   
    
    public void insertarPrincipio(T dato){
        Nodo <T> nuevo = new Nodo<> (dato);
@@ -48,7 +58,10 @@ public class ListaAdyacencia <T> {
        tamaño ++;
    }
    
-   //Metodo insertar al final de la lista
+   /**Metodo insertar al final de la lista
+    * 
+    * @param dato El elemento a añadir 
+    */
    
    public void insertarFinal(T dato){
        Nodo <T> nuevo = new Nodo <> (dato);
@@ -66,9 +79,20 @@ public class ListaAdyacencia <T> {
        
    }
    
+   /**
+    * Metodo que devuelve el numero actual de elementos en la lista
+    * @return El tamaño de la lista (un entero)
+    */
+   
    public int getTamaño (){
        return this.tamaño;
    }
+   
+   /** 
+    * Metodo que elimina el **primer nodo** de la lista
+    * @return El dato (de tipo T) que estaba en el nodo eliminado
+    * o {@code null} si la lista esta vacía
+    */
    
    public T eliminarInicio(){
        if (esVacio()){
@@ -90,6 +114,12 @@ public class ListaAdyacencia <T> {
         
     }   
    
+   /**
+    * Elimina en **ultimo nodo** de la lista
+    * 
+    * @return El dato (de tipo T) que estaba en el nodo eliminado, 
+    * o {@code null} si la lista está vacía.
+    */
        
     public T eliminarFinal(){
         if (esVacio()){
@@ -118,7 +148,10 @@ public class ListaAdyacencia <T> {
         
     }
     
-    // Metodo para recorrer e imprimir todos los elementos de la lista
+    /**
+     * Muestra en la consola todos los elementos en la lista
+     * si la lista es vacia, imprime un mensaje indicandolo
+     */
     
     public void mostrarLista() {
         if (esVacio()) {
@@ -141,7 +174,11 @@ public class ListaAdyacencia <T> {
         System.out.println(" ]");
     }
     
-    // Metodo para borrar un elemento x de la lista
+    /**
+     * Busca y elimina ** la primera ocurrrencia** del elemento dado
+     * utiliza {@code equals()} para comparar el dato
+     * @param dato El elemento (de tipo T) a buscar y eliminar de la lista
+     */
     
     public void eliminarElem (T dato){
         if (esVacio()){
@@ -174,7 +211,11 @@ public class ListaAdyacencia <T> {
         tamaño--;
     }
     
-    // Metodo recorrer la lista
+    /**
+     * Recorre la lista **desde la cabeza hasta la cola**
+     * Esta implementacion itera a traves de todos los nodos sin realizar ninguna operacion
+     */
+    
     public void recorrer() {
         Nodo<T> actual = head;
 
@@ -183,7 +224,12 @@ public class ListaAdyacencia <T> {
         }
     }
     
-    // Metodo buscar un dato de la lista
+    /**
+     * Busca la primera ocurrencia del elemento especifico en la lista
+     * @param dato El elemento (de tipo T) a buscar
+     * @return El **nodo** ({@code Nodo <T>}) que contiene el dato si es encontrado
+     * o {@code null} si el dato no esta en la lista
+     */
     
     public Nodo<T> buscar(T dato) {
         Nodo<T> actual = head;
