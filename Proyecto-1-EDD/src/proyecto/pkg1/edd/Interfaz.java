@@ -28,11 +28,7 @@ public class Interfaz extends javax.swing.JFrame {
      */
     public Interfaz() {
         initComponents();
-<<<<<<< HEAD
-        this.miGrafo = new Grafo (true,100); // Inicializacion del grafo
-=======
          this.miGrafo = new Grafo (true,100); // Inicializacion del grafo
->>>>>>> 34d0ee194de542d174dbf1321383f0bfb5253faa
     }
 
     /**
@@ -193,12 +189,6 @@ JFileChooser chooser = new JFileChooser();
             
             this.miGrafo.cargarDesdeArchivo(usuariosArray, relacionesArray);
             System.out.println("Grafo listo para ser mostrado.");
-<<<<<<< HEAD
-            
-            
-=======
->>>>>>> 34d0ee194de542d174dbf1321383f0bfb5253faa
-
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
