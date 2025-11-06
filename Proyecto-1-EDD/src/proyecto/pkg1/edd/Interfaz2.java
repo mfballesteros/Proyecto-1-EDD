@@ -17,10 +17,19 @@ public class Interfaz2 extends javax.swing.JFrame {
     /**
      * Creates new form Interfaz2
      */
+<<<<<<< HEAD
     public Interfaz2() {
         initComponents();
         this.miGrafo = new Grafo (true,100);
     }
+=======
+    //public Interfaz2() {
+      //  initComponents();
+       // this.miGrafo = new Grafo (true,100);
+    //}
+    
+    
+>>>>>>> 34d0ee194de542d174dbf1321383f0bfb5253faa
     public Interfaz2(JFrame ventanaAnterior, Grafo grafoConstruido) {
     initComponents();
     this.ventanaAnterior = ventanaAnterior; // Guarda la ventana
@@ -151,7 +160,11 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+<<<<<<< HEAD
        miGrafo.mostrarGrafo();
+=======
+        miGrafo.mostrarGrafo();
+>>>>>>> 34d0ee194de542d174dbf1321383f0bfb5253faa
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
