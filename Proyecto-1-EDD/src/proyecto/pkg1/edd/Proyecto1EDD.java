@@ -17,6 +17,7 @@ public class Proyecto1EDD {
         Interfaz ventana = new Interfaz();
         ventana.setVisible(true);
 <<<<<<< HEAD
+<<<<<<< HEAD
     
   }
     
@@ -24,4 +25,7 @@ public class Proyecto1EDD {
 =======
     }
 >>>>>>> 34d0ee194de542d174dbf1321383f0bfb5253faa
+=======
+    }
+>>>>>>> 1b2d50e0d2180abe70da990939ed9cb76c5d3e74
 }

@@ -29,10 +29,14 @@ public class Interfaz extends javax.swing.JFrame {
     public Interfaz() {
         initComponents();
 <<<<<<< HEAD
+<<<<<<< HEAD
         this.miGrafo = new Grafo (true,100); // Inicializacion del grafo
 =======
          this.miGrafo = new Grafo (true,100); // Inicializacion del grafo
 >>>>>>> 34d0ee194de542d174dbf1321383f0bfb5253faa
+=======
+         this.miGrafo = new Grafo (true,100); // Inicializacion del grafo
+>>>>>>> 1b2d50e0d2180abe70da990939ed9cb76c5d3e74
     }
 
     /**
@@ -194,10 +198,13 @@ JFileChooser chooser = new JFileChooser();
             this.miGrafo.cargarDesdeArchivo(usuariosArray, relacionesArray);
             System.out.println("Grafo listo para ser mostrado.");
 <<<<<<< HEAD
+<<<<<<< HEAD
             
             
 =======
 >>>>>>> 34d0ee194de542d174dbf1321383f0bfb5253faa
+=======
+>>>>>>> 1b2d50e0d2180abe70da990939ed9cb76c5d3e74
 
 
         } catch (IOException e) {
