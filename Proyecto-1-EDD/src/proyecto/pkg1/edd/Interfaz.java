@@ -21,12 +21,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class Interfaz extends javax.swing.JFrame {
     private ArrayList<String> listaUsuarios = new ArrayList<>();
     private ArrayList<String> listaRelaciones = new ArrayList<>();
+    private Grafo miGrafo;
 
     /**
      * Creates new form Interfaz
      */
     public Interfaz() {
         initComponents();
+         this.miGrafo = new Grafo (true,100); // Inicializacion del grafo
     }
 
     /**
@@ -182,6 +184,11 @@ JFileChooser chooser = new JFileChooser();
 
             System.out.println("Usuarios cargados en memoria: " + this.listaUsuarios);
             System.out.println("Relaciones cargadas en memoria: " + this.listaRelaciones);
+            String[] usuariosArray = this.listaUsuarios.toArray(new String[0]);
+            String[] relacionesArray = this.listaRelaciones.toArray(new String[0]);
+            
+            this.miGrafo.cargarDesdeArchivo(usuariosArray, relacionesArray);
+            System.out.println("Grafo listo para ser mostrado.");
 
 
         } catch (IOException e) {
@@ -224,7 +231,7 @@ int resultado = JOptionPane.showConfirmDialog(
 );
 
 if (resultado == JOptionPane.OK_OPTION) {
-    Interfaz2 siguientePagina = new Interfaz2(this);
+    Interfaz2 siguientePagina = new Interfaz2(this, this.miGrafo);
     siguientePagina.setVisible(true);
     this.setVisible(false);
 } else {

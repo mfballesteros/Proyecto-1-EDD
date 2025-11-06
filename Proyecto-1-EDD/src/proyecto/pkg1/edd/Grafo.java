@@ -8,24 +8,33 @@ package proyecto.pkg1.edd;
  *
  * @author danie_xe5djpj
  */
+
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.view.Viewer;
+
 public class Grafo {
     private boolean dirigido;
     private int numVertices;
     private int maxNodos;
     private ListaAdyacencia [] listaAd; //aqui va la lista general CREAR ARRAY LIST, LISTA DE ARREGLOS
     private String [] nombres; //creando un arreglo de strings
+    private Graph visualGraph;
    
             
-   
+  
 //CONSTRUCTORES 
 
     public Grafo(boolean dirigido, int n) {
         this.dirigido = true;
         this.numVertices = 0; // cuando creas el grafo vacio
         this.maxNodos = n;
+        System.setProperty("org.graphstream.ui", "swing");
+        this.visualGraph = new SingleGraph ("Red SocialGrafo");
         this.listaAd = new ListaAdyacencia [n]; //el tamano del array sera la cantidad max de nodos
         //cada indice del array es un vertice
         this.nombres = new String[n]; // creando una lista paralela
+        
     }
 
     public void insertarVertice (String nombre){
@@ -40,6 +49,8 @@ public class Grafo {
         
         listaAd[numVertices] = new ListaAdyacencia();
         nombres[numVertices] = nombre;
+        visualGraph.addNode(nombre);
+        visualGraph.getNode(nombre).setAttribute ("ui.label", nombre); // Para que el nombre se vea
         numVertices++;
     }
     
@@ -82,7 +93,9 @@ public class Grafo {
         if (!dirigido){
             listaAd[j].insertarFinal(i);
         } // si no es dirigido agregas tambien a j la relacion con i 
-    
+        String edgeId = primero + "->" + segundo; 
+// Usamos los nombres como IDs de los nodos. Usamos 'dirigido' para la dirección
+        visualGraph.addEdge (edgeId, primero, segundo, dirigido);
         }
     
     
@@ -192,9 +205,66 @@ public class Grafo {
     public String[] getNombres() {
         return nombres;
     }
+    
+    /**
+ * Recibe listas de datos y construye el grafo llamando a insertarVertice e insertarArista.
+ * Esto sincroniza automáticamente con GraphStream.
+ */
+    public void cargarDesdeArchivo(String[] usuarios, String[] relaciones) {
+    
+    for (String nombreUsuario : usuarios) {
+        if (nombreUsuario != null) {
+            this.insertarVertice(nombreUsuario); 
+        }
+    }
+    
+    for (String relacion : relaciones) {
+        if (relacion != null) {
+            String [] partes = relacion.split(","); 
+            
+            if (partes.length == 2){
+                String origen = partes [0].trim();
+                String destino = partes [1].trim();
+                
+                this.insertarArista(origen, destino);
+            }
+        }
+    }
+    
+    System.out.println("Grafo construido y sincronizado. Nodos totales: " + usuarios.length);
+}
 
+   public void mostrarGrafo(){
+    System.out.println("Generando representación visual del grafo con GraphStream...");
     
+    // El estilo se corrige aquí, asegurando que todos los bloques estén cerrados correctamente.
+    String styleSheet = 
+        "graph { fill-color: #f0f0f0; padding: 50px; }" +
+        "node {" +
+        "   text-mode: normal;" + 
+        "   text-size: 17px;" + 
+        "   text-color: black;" + // Se añade para mejor contraste en texto grande
+        "   fill-color: #C39EE4; size: 20px;" +
+        "}" + 
+        "edge {" + 
+        "   fill-color: gray;" + 
+        
+        (this.dirigido ? " arrow-size: 8px, 4px;" : "") + 
+        "}"; 
+        
+    this.visualGraph.setAttribute ("ui.stylesheet", styleSheet);
+    this.visualGraph.setAttribute ("ui.quality");
+    this.visualGraph.setAttribute ("ui.antialias");
     
+    //Muestra la ventana y la lanza en un hilo separado
+    Viewer viewer = this.visualGraph.display();
+    
+    // Aqui se mantiene la ventana oculta al cerrarse, pero sin detener
+    // el programa principal
+    viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
+    System.out.println("Ventana de grafo mostrada");
+    }
+   
 }
 
     
