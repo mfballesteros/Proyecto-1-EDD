@@ -12,16 +12,19 @@ import javax.swing.JFrame;
  */
 public class Interfaz2 extends javax.swing.JFrame {
     private JFrame ventanaAnterior;
+    private Grafo miGrafo;
 
     /**
      * Creates new form Interfaz2
      */
     public Interfaz2() {
         initComponents();
+        this.miGrafo = new Grafo (true,100);
     }
-    public Interfaz2(JFrame ventanaAnterior) {
+    public Interfaz2(JFrame ventanaAnterior, Grafo grafoConstruido) {
     initComponents();
     this.ventanaAnterior = ventanaAnterior; // Guarda la ventana
+    this.miGrafo = grafoConstruido;
 }
 
     /**
@@ -80,6 +83,11 @@ public class Interfaz2 extends javax.swing.JFrame {
 
         jButton4.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton4.setText("Mostrar Grafo");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 280, 140, -1));
 
         jButton5.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
@@ -141,6 +149,10 @@ public class Interfaz2 extends javax.swing.JFrame {
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+       miGrafo.mostrarGrafo();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
