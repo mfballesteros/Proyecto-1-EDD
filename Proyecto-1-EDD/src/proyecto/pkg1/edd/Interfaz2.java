@@ -27,8 +27,10 @@ public class Interfaz2 extends javax.swing.JFrame {
     /**
      * Creates new form Interfaz2
      */
+
     public Interfaz2() {
         initComponents();
+        this.miGrafo = new Grafo (true,100);
     }
     
     
@@ -250,6 +252,12 @@ public class Interfaz2 extends javax.swing.JFrame {
         }
       
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+
+       miGrafo.mostrarGrafo();
+
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * Re-escribe el archivo .txt completo usando las listas en memoria.
