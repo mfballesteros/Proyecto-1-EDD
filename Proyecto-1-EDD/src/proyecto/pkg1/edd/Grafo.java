@@ -5,7 +5,10 @@
 package proyecto.pkg1.edd;
 
 /**
- *
+ *Clase que en la que se maneja el flujo principal del grafo 
+ * Maneja agregar un usuario o eliminarlo y sus relaciones
+ * La información de las usuarios y sus relaciones 
+ * Graficación del grafo
  * @author danie_xe5djpj
  */
 
@@ -13,6 +16,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.view.Viewer;
 
+// Atributos de la clase
 public class Grafo {
     private boolean dirigido;
     private int numVertices;
@@ -36,6 +40,12 @@ public class Grafo {
         this.nombres = new String[n]; // creando una lista paralela
         
     }
+    
+    
+    /**
+     * Metodo que inserta el vertice (usuario) al grafo 
+     *   * @param nombre El nombre del usuario a insertar.
+     */
 
     public void insertarVertice (String nombre){
         if (accederIndice(nombre) != -1) {
@@ -54,7 +64,13 @@ public class Grafo {
         numVertices++;
     }
     
-    
+    /**
+     * Metodo que permite acceder al indice,se busca al usuario por nombre y deuelve su posición en el array
+     *   * Buscar el [i] en el que se ecuentra ese usuario 
+     * *@param nombre (nombre de usuario)
+     * @return El índice del usuario si se encuentra.
+     */
+
     
     public int accederIndice (String nombre){
         for (int i = 0; i < maxNodos; i++ ){
@@ -67,12 +83,22 @@ public class Grafo {
         
     }
     
-    
+    /**
+     * Se obtiene el Id del Usuario 
+     *   * @param nombre
+     */
+
     public int obtenerIdUsuario(String nombre) {
         return accederIndice(nombre);
     }
     
-    
+    /**
+     * Metodo que inserta la arista (relación) entre un usuario y otro 
+     *   * Se pasan dos parámetros string para lectura de nombres 
+     * @param primero
+     * @param segundo
+     */
+
     public void insertarArista(String primero, String segundo) { // se toman dos elementos, i como el primero y j con el que se quiere relacionar
         int i = accederIndice(primero);
         int j = accederIndice(segundo);
@@ -99,6 +125,13 @@ public class Grafo {
         }
     
     
+/**
+     * Método que elimina la arista (relación) entre un usuario y otro 
+     *   * Se pasan dos parámetros string para lectura de nombres 
+     * @param primero
+     * @param segundo
+     */
+    
     public void eliminarArista (String primero,String segundo){ //eliminando relaciones
         int i = accederIndice(primero);
         int j = accederIndice(segundo);
@@ -118,6 +151,10 @@ public class Grafo {
         }
     
     
+     /**
+     * Método que elimina el vertice (usuario) al grafo 
+     *   * @param nom
+     */
     
     public void eliminarVertice (String nom) { //eliminando usuarios
         int i = accederIndice(nom);
@@ -136,7 +173,10 @@ public class Grafo {
     }
  
     
-    
+     /**
+     * Metodo que permite imprimir el grafo sencillo sin aplicación de gráfica. 
+     *   *
+     */
     public void imprimirGrafo (){
         System.out.println("El grafo todavia tiene" + maxNodos + "nodos a utilizar");
         System.out.println("En el grafo existen" + numVertices + "usuarios registrados");
@@ -163,9 +203,16 @@ public class Grafo {
                 }
         }
 
-    // este metodo se basa en visitiar primero a todos los que conoce y apilar cuando ya no tienes más relaciones por visitar
-    //(el primero que entra es el ultimo que sale)
-    // se utiliza la pila para encontrar todos los elementos completos.
+    
+     /**
+     * Método que se basa en implementar DFS en el grafo. 
+     * * Visita todos los nodos y los apila en la pila
+     *   * Se utiliza la pila para encontrar todos los elementos completos.(El primero que entra es el último que sale). Postorden
+     * @param nodo
+     * @param nodosVisitados
+     * @param pila
+     */
+  
     private void primeraDFS(int nodo, boolean[] nodosVisitados, Pila pila) {
         nodosVisitados[nodo] = true; // para qye no lo visite otra vez
     
@@ -187,10 +234,15 @@ public class Grafo {
 // agrega a la pila
     pila.apilar(nodo);
 }
-   
+  
+    
+  /**
+     * Método que se basa en transponer el grafo para hallar relaciones. Invierte las aristas
+     *   * Se voltean las relaciones para encontrar las visitas entre ellos .
+     * 
+     */
+  
 
-
-// ahora transponer el DSF para hallar relaciones, se voltean las relaciones para encontrar sus visitas entre ellos.
     private ListaAdyacencia<Integer>[] grafoTranspuesto() {
     ListaAdyacencia<Integer>[] grafoVolteado = new ListaAdyacencia[maxNodos];
     
@@ -237,7 +289,7 @@ public class Grafo {
 
     
     /** Método auxiliar para obtener un componente fuertemente conectado en el grafo transpuesto
-     * Recoore en profundidad esde un nodo dado, marcandolos visitados y agregando
+     * Recorre en profundidad esde un nodo dado, marcandolos visitados y agregando
      * a la lista los que pertenecen al mismo componente
      * @param nodo
      * @param visitado
@@ -266,8 +318,14 @@ public class Grafo {
 
     
     
-   
-//ahora buscamos los componentes, usando los metodos anteriores
+     /**
+     * Se buscan los componentes, usando los métodos anteriores.
+     * Ejecuta un DFS sobre el grafo para llenar una pila.
+     * * Calcula el grafo transpuesto.
+     * ** Utiliza nuevamente un DFS sobre el grafo transpuesto, usando el orden de la pila, para identificar los componentes FE.
+     *   * 
+     */
+
     public void componentesFuertementeConectados() {    
         if (numVertices == 0) return;
         
@@ -319,7 +377,7 @@ public class Grafo {
     
 
     
-     //no se requieren usar los sets para num vertice y maxnodos al ser una cantidad definida desde el inicio, y no modificable.
+     //No se requieren usar los sets para num vertice y maxnodos al ser una cantidad definida desde el inicio, y no modificable.
     
     /**
      * @return the 
