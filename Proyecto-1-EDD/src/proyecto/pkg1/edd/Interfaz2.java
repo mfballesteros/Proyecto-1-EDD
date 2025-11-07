@@ -4,15 +4,25 @@
  */
 package proyecto.pkg1.edd;
 
+import java.io.BufferedWriter; 
+import java.io.FileWriter; 
+import java.io.IOException;   
+import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import proyecto.pkg1.edd.Grafo;
 
 /**
  *
  * @author a-utr
  */
 public class Interfaz2 extends javax.swing.JFrame {
-    private JFrame ventanaAnterior;
+    private Interfaz ventanaAnterior;
     private Grafo miGrafo;
+    
+    private ArrayList<String> listaUsuarios;
+    private ArrayList<String> listaRelaciones;
+    private String rutaDelArchivo;
 
     /**
      * Creates new form Interfaz2
@@ -22,15 +32,16 @@ public class Interfaz2 extends javax.swing.JFrame {
         initComponents();
         this.miGrafo = new Grafo (true,100);
     }
-    //public Interfaz2() {
-      //  initComponents();
-       // this.miGrafo = new Grafo (true,100);
-    //}
+    
+    
+    public Interfaz2(Interfaz ventanaAnterior, Grafo grafoConstruido, ArrayList<String> usuarios, ArrayList<String> relaciones, String ruta) {
+        initComponents();
+        this.ventanaAnterior = ventanaAnterior;
+        this.miGrafo = grafoConstruido;
 
-    public Interfaz2(JFrame ventanaAnterior, Grafo grafoConstruido) {
-    initComponents();
-    this.ventanaAnterior = ventanaAnterior; // Guarda la ventana
-    this.miGrafo = grafoConstruido;
+        this.listaUsuarios = usuarios;
+        this.listaRelaciones = relaciones;
+        this.rutaDelArchivo = ruta;
 }
 
     /**
@@ -45,12 +56,10 @@ public class Interfaz2 extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jTextField3 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -73,18 +82,24 @@ public class Interfaz2 extends javax.swing.JFrame {
                 jTextField1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 150, -1));
-
-        jButton1.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
-        jButton1.setText("👤 Agregar Usuario");
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 160, -1));
+        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 150, -1));
 
         jButton2.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         jButton2.setText("➖ Eliminar Usuario");
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 150, -1));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, 150, -1));
 
         jButton3.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         jButton3.setText("Crear Relacion");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 120, -1));
 
         jButton4.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
@@ -104,13 +119,6 @@ public class Interfaz2 extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, -1));
-
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 160, -1));
         jPanel2.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 160, -1));
         jPanel2.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 160, -1));
 
@@ -147,14 +155,103 @@ public class Interfaz2 extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
 
     if (this.ventanaAnterior != null) {
+        this.ventanaAnterior.actualizarTextAreaVisual(); 
         this.ventanaAnterior.setVisible(true);
     }
     this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
+/**
+     * Maneja el botón "Mostrar Grafo"
+     * Verifica que la instancia 'miGrafo' no sea nula
+     * Si el grafo existe, llama al método {@code miGrafo.mostrarGrafo()} para abrir la ventana de visualización
+     * @param evt El evento de clic que disparó esta acción.
+     */
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if (miGrafo != null) {
+            miGrafo.mostrarGrafo();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: El grafo no ha sido cargado.");
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+/**
+     * Maneja el botón "Eliminar Usuario" 
+     * Obtiene el usuario
+     * Elimina el vértice de 'miGrafo'.
+     * Elimina el usuario de 'listaUsuarios'.
+     * Elimina todas las relaciones que incluyan a ese usuario de 'listaRelaciones'.
+     * Llama a 'reescribirArchivoTXT()' para guardar los cambios en el archivo.
+     * @param evt Evento de clic que disparó esta acción.
+     */
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+        String usuarioAEliminar = jTextField1.getText().trim();
+        if (!usuarioAEliminar.startsWith("@")) {
+            usuarioAEliminar = "@" + usuarioAEliminar;
+        }
+
+        if (!this.listaUsuarios.contains(usuarioAEliminar)) {
+            JOptionPane.showMessageDialog(this, "El usuario '" + usuarioAEliminar + "' no existe.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String finalUsuarioAEliminar = usuarioAEliminar; 
+
+        this.miGrafo.eliminarVertice(usuarioAEliminar);
+        this.listaUsuarios.remove(usuarioAEliminar);
+        this.listaRelaciones.removeIf(rel -> rel.contains(finalUsuarioAEliminar));
+
+
+        if (reescribirArchivoTXT()) {
+            JOptionPane.showMessageDialog(this, "Usuario eliminado exitosamente.");
+            jTextField1.setText("");
+
+        }
+      
+    }//GEN-LAST:event_jButton2ActionPerformed
+/**
+     * Maneja el botón "Crear Relación" 
+     * Obtiene los usuarios
+     * Verifica que la relación no exista ya 
+     * Inserta la arista en 'miGrafo' y agrega la 
+     * relación a 'listaRelaciones'.
+     * Guardar los cambios en el archivo
+     * @param evt Evento de clic que disparó esta acción
+     */
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
+        String u1 = jTextField2.getText().trim();
+        String u2 = jTextField4.getText().trim();
+
+        if (!u1.startsWith("@")) u1 = "@" + u1;
+        if (!u2.startsWith("@")) u2 = "@" + u2;
+
+        if (u1.isEmpty() || u2.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar ambos usuarios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!this.listaUsuarios.contains(u1) || !this.listaUsuarios.contains(u2)) {
+            JOptionPane.showMessageDialog(this, "Uno o ambos usuarios no existen.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String nuevaRelacion = u1 + ", " + u2;
+        String relacionInversa = u2 + ", " + u1;
+
+        if (this.listaRelaciones.contains(nuevaRelacion) || this.listaRelaciones.contains(relacionInversa)) {
+            JOptionPane.showMessageDialog(this, "Esa relación ya existe.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        this.miGrafo.insertarArista(u1, u2);
+        this.listaRelaciones.add(nuevaRelacion);
+
+        if (reescribirArchivoTXT()) {
+            JOptionPane.showMessageDialog(this, "Relación creada exitosamente.");
+            jTextField2.setText("");
+            jTextField4.setText("");
+
+        }
+      
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
 
@@ -163,42 +260,38 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
-     * @param args the command line arguments
+     * Re-escribe el archivo .txt completo usando las listas en memoria.
+     * @return true si fue exitoso, false si hubo un error.
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+    private boolean reescribirArchivoTXT() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.rutaDelArchivo))) {
+            
+            writer.write("usuarios");
+            writer.newLine();
+            for (String usuario : this.listaUsuarios) {
+                writer.write(usuario);
+                writer.newLine();
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Interfaz2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Interfaz2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Interfaz2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Interfaz2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Interfaz2().setVisible(true);
+            writer.newLine();
+            writer.write("relaciones");
+            writer.newLine();
+            for (String relacion : this.listaRelaciones) {
+                writer.write(relacion);
+                writer.newLine();
             }
-        });
+            
+            System.out.println("Archivo .txt actualizado exitosamente.");
+            return true;
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error fatal al re-escribir el archivo: " + e.getMessage(), "Error de Archivo", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -212,7 +305,6 @@ public class Interfaz2 extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 }

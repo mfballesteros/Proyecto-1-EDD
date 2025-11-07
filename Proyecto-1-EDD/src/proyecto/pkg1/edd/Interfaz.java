@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import proyecto.pkg1.edd.Grafo; 
+import java.io.BufferedWriter;
+import java.io.FileWriter; 
+
 
 
 /**
@@ -40,7 +44,6 @@ public class Interfaz extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 7), new java.awt.Dimension(0, 7), new java.awt.Dimension(32767, 7));
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
@@ -52,11 +55,12 @@ public class Interfaz extends javax.swing.JFrame {
         txtContenido = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jButton2 = new javax.swing.JButton();
+        txtNuevoUsuario = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(215, 235, 255));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(filler1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 200, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 102));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -94,7 +98,7 @@ public class Interfaz extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, -1, 30));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 450, -1, 30));
 
         txtContenido.setColumns(20);
         txtContenido.setRows(5);
@@ -110,9 +114,25 @@ public class Interfaz extends javax.swing.JFrame {
         jSeparator1.setForeground(new java.awt.Color(0, 0, 102));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 480, 10));
 
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 500, 460));
+        jButton2.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
+        jButton2.setText("👤 Agregar Usuario");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 450, 160, -1));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 500));
+        txtNuevoUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNuevoUsuarioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtNuevoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 410, 150, -1));
+
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 500, 500));
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 550));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -137,13 +157,13 @@ JFileChooser chooser = new JFileChooser();
 
     if (f != null) {
         String filename = f.getAbsolutePath();
-        
         jTextField1.setText(filename); 
 
         try (BufferedReader reader = new BufferedReader(new FileReader(f))) {
  
             this.listaUsuarios.clear();
             this.listaRelaciones.clear();
+            this.miGrafo = new Grafo(true, 100);
 
             String modo = "ninguno";
             String linea;
@@ -152,7 +172,6 @@ JFileChooser chooser = new JFileChooser();
             while ((linea = reader.readLine()) != null) {
 
                 String lineaLimpia = linea.trim().toLowerCase(); 
-
                 if (lineaLimpia.isEmpty()) {
                     continue; 
                 }
@@ -168,7 +187,6 @@ JFileChooser chooser = new JFileChooser();
                 }
 
                 String dato = linea.trim();
-                //System.out.println(dato);
                 
                 if (modo.equals("usuarios")) {
                     this.listaUsuarios.add(dato);
@@ -182,13 +200,12 @@ JFileChooser chooser = new JFileChooser();
 
             txtContenido.setText(contenidoParaMostrar.toString());
 
-            System.out.println("Usuarios cargados en memoria: " + this.listaUsuarios);
-            System.out.println("Relaciones cargadas en memoria: " + this.listaRelaciones);
             String[] usuariosArray = this.listaUsuarios.toArray(new String[0]);
             String[] relacionesArray = this.listaRelaciones.toArray(new String[0]);
             
             this.miGrafo.cargarDesdeArchivo(usuariosArray, relacionesArray);
             System.out.println("Grafo listo para ser mostrado.");
+
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -210,7 +227,8 @@ JFileChooser chooser = new JFileChooser();
      * @param evt Evento de accion generado por el boton
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-String rutaArchivo = jTextField1.getText();
+
+    String rutaArchivo = jTextField1.getText();
     if (rutaArchivo.trim().isEmpty()) {
         JOptionPane.showMessageDialog(
             this,
@@ -218,65 +236,115 @@ String rutaArchivo = jTextField1.getText();
             "Error: No hay archivo",
             JOptionPane.ERROR_MESSAGE
         );
-        return; 
-    } 
-        
-int resultado = JOptionPane.showConfirmDialog(
-    this, 
-    "El archivo ha sido guardado exitosamente. ¿Desea continuar ?", 
-    "Guardado", 
-    JOptionPane.OK_CANCEL_OPTION, 
-    JOptionPane.INFORMATION_MESSAGE 
-);
+        return;
+    }
 
-if (resultado == JOptionPane.OK_OPTION) {
-    Interfaz2 siguientePagina = new Interfaz2(this, this.miGrafo);
-    siguientePagina.setVisible(true);
-    this.setVisible(false);
-} else {
-   
-}
-    }//GEN-LAST:event_jButton1ActionPerformed
+    int resultado = JOptionPane.showConfirmDialog(
+        this,
+        "El archivo ha sido guardado exitosamente. ¿Desea continuar?",
+        "Guardado",
+        JOptionPane.OK_CANCEL_OPTION,
+        JOptionPane.INFORMATION_MESSAGE
+    );
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Interfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Interfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Interfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Interfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    if (resultado == JOptionPane.OK_OPTION) {
+
+            Interfaz2 siguientePagina = new Interfaz2(this, this.miGrafo, this.listaUsuarios, this.listaRelaciones, rutaArchivo);
+
+            siguientePagina.setVisible(true);
+            this.setVisible(false);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Interfaz().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+/**
+     * Maneja el botón "Agregar Usuario"
+     * * @param evt El evento de clic que disparó esta acción.
+     */
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String nuevoUsuario = txtNuevoUsuario.getText().trim();
+        String rutaArchivo = jTextField1.getText(); // Obtenemos la ruta
+
+        if (nuevoUsuario.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un nombre de usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String nuevoUsuarioConArroba;
+        if (nuevoUsuario.startsWith("@")) {
+            nuevoUsuarioConArroba = nuevoUsuario;
+        } else {
+            nuevoUsuarioConArroba = "@" + nuevoUsuario;
+        }
+   
+   
+        if (this.listaUsuarios.contains(nuevoUsuarioConArroba)) {
+            JOptionPane.showMessageDialog(this, "El usuario '" + nuevoUsuarioConArroba + "' ya existe.", "Usuario duplicado", JOptionPane.WARNING_MESSAGE);
+            txtNuevoUsuario.setText("");
+            return;
+        }
+
+        this.listaUsuarios.add(nuevoUsuarioConArroba);
+
+        this.miGrafo.insertarVertice(nuevoUsuarioConArroba);
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaArchivo))) {
+
+            writer.write("usuarios");
+            writer.newLine();
+            for (String usuario : this.listaUsuarios) {
+                writer.write(usuario);
+                writer.newLine();
             }
-        });
+
+            writer.newLine();
+            writer.write("relaciones");
+            writer.newLine();
+            for (String relacion : this.listaRelaciones) {
+                writer.write(relacion);
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al re-escribir el archivo: " + e.getMessage(), "Error de Archivo", JOptionPane.ERROR_MESSAGE);
+            this.listaUsuarios.remove(nuevoUsuarioConArroba);
+            this.miGrafo.eliminarVertice(nuevoUsuarioConArroba);
+            return; // Detiene la ejecución
+        }
+
+        txtNuevoUsuario.setText("");
+        actualizarTextAreaVisual();
+
+        System.out.println("Usuario agregado y archivo re-escrito: " + nuevoUsuarioConArroba);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtNuevoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNuevoUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNuevoUsuarioActionPerformed
+/**
+     * Actualiza el contenido del área de texto 'txtContenido' en la interfaz.
+     * * Construye un String que muestra todos los elementos de 'listaUsuarios'
+     * y 'listaRelaciones', separados por encabezados, y luego
+     * asigna ese String al 'txtContenido'.
+     */
+    public void actualizarTextAreaVisual() {
+        StringBuilder contenido = new StringBuilder();
+
+        contenido.append("--- USUARIOS ---\n");
+        for (String u : this.listaUsuarios) {
+            contenido.append(u).append("\n");
+        }
+
+        contenido.append("\n--- RELACIONES ---\n");
+        for (String r : this.listaRelaciones) {
+            contenido.append(r).append("\n");
+        }
+        txtContenido.setText(contenido.toString());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botoncargararchivo;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -286,5 +354,6 @@ if (resultado == JOptionPane.OK_OPTION) {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextArea txtContenido;
+    private javax.swing.JTextField txtNuevoUsuario;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,7 @@
  */
 package proyecto.pkg1.edd;
 
+import proyecto.pkg1.edd.Interfaz; 
 /**
  *
  * @author bettinacarnevali
@@ -14,8 +15,11 @@ public class Proyecto1EDD {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Interfaz ventana = new Interfaz();
-        ventana.setVisible(true);
-    
-    }
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Interfaz().setVisible(true); 
+            }
+        });
+    } 
 }
