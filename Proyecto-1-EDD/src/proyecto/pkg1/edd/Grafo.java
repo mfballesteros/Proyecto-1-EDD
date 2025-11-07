@@ -177,7 +177,7 @@ public class Grafo {
             // Obtiene el índice
             int vecino = nodoConectado.getData();
             
-            if (!nodosVisitados[vecino]) {
+            if (nombres[vecino] != null && !nodosVisitados[vecino]) {
                 primeraDFS(vecino, nodosVisitados, pila);
             }
             nodoConectado = nodoConectado.getNextNodo();
@@ -192,34 +192,61 @@ public class Grafo {
 
 // ahora transponer el DSF para hallar relaciones, se voltean las relaciones para encontrar sus visitas entre ellos.
     private ListaAdyacencia<Integer>[] grafoTranspuesto() {
-        ListaAdyacencia<Integer>[] grafoVolteado = new ListaAdyacencia[maxNodos];    
-        for (int i = 0; i < maxNodos; i++) {
-            if (listaAd[i] != null) {
-                Nodo<Integer> actual = listaAd[i].getHead();
-                while (actual != null) {
-                    int j = actual.getData();
-                    if (grafoVolteado[j] == null) {
-                        grafoVolteado[j] = new ListaAdyacencia<>();
-                    }
+    ListaAdyacencia<Integer>[] grafoVolteado = new ListaAdyacencia[maxNodos];
+    
+    //inicializa una lista para cada nodo existente, incluso si está vacía.
+    for (int k = 0; k < maxNodos; k++) {
+        if (nombres[k] != null) { 
+             grafoVolteado[k] = new ListaAdyacencia<>();
+        }
+    }
+    
+    //invertir las aristas.
+    for (int i = 0; i < maxNodos; i++) { 
+        if (nombres[i] != null && listaAd[i] != null) { 
+            Nodo<Integer> actual = listaAd[i].getHead();
+            
+            while (actual != null) {
+                int j = actual.getData(); 
+
+                if (j >= 0 && j < maxNodos && nombres[j] != null) { 
+                    // Se inserta el origen original (i) en el destino original (j)
                     grafoVolteado[j].insertarFinal(i);
-                    actual = actual.getNextNodo();
                 }
+                actual = actual.getNextNodo();
             }
         }
-
-        return grafoVolteado;
     }
+    return grafoVolteado;
+    
+}
+    
+    private void resetColores(){
+       for (int i= 0; i < maxNodos; i ++){
+           if ( nombres [i] != null && visualGraph.getNode(nombres[i]) != null){
+               visualGraph.getNode(nombres[i]).removeAttribute("ui.class");
+           }
+       }
+   }
 
 //recorremos grafo transpuesto y lo vamos imprimiendo si los usuarios estan relacionados
     private void printGrafoTranspuesto (int nodo, boolean[] visitado, ListaAdyacencia<Integer>[] grafoTranspuesto) {
+        if (nodo < 0 || nodo >= visitado.length || nombres[nodo] == null || visitado[nodo]) {
+        return;
+    }
         visitado[nodo] = true;
+        String nombreNodo = nombres [nodo];
+        
+        if (this.visualGraph.getNode(nombreNodo) != null){
+            this.visualGraph.getNode(nombreNodo).setAttribute ("ui.class", "CFC_RED");
+        }
         System.out.print(nombres[nodo] + " ");
 
         if (grafoTranspuesto[nodo] != null) {
             Nodo<Integer> actual = grafoTranspuesto[nodo].getHead();
             while (actual != null) {
                 int vecino = actual.getData();
-                if (!visitado[vecino]) {
+                if (nombres[vecino] != null && !visitado[vecino]) {
                     printGrafoTranspuesto(vecino, visitado, grafoTranspuesto);
                 }
                 actual = actual.getNextNodo();
@@ -227,10 +254,34 @@ public class Grafo {
         }
     }
     
+    private void obtenerComponenteDFS(int nodo, boolean[] visitado,
+                                  ListaAdyacencia<Integer>[] gT,
+                                  ListaAdyacencia<Integer> componente) {
+
+    visitado[nodo] = true;
+    componente.insertarFinal(nodo); // meter nodo en la lista
+
+    if (gT[nodo] != null) {
+        Nodo<Integer> actual = gT[nodo].getHead();
+        while (actual != null) {
+            int vecino = actual.getData();
+            if (nombres[vecino] != null && !visitado[vecino]) {
+                obtenerComponenteDFS(vecino, visitado, gT, componente);
+            }
+            actual = actual.getNextNodo();
+        }
+    }
+}
+
+    
+    
+   
 //ahora buscamos los componentes, usando los metodos anteriores
     public void componentesFuertementeConectados() {    
         if (numVertices == 0) return;
-
+        
+        resetColores();
+        
         boolean[] visitado = new boolean[maxNodos];
         Pila pila = new Pila();
 
@@ -240,23 +291,41 @@ public class Grafo {
             }
         }
 
-        ListaAdyacencia<Integer>[] grafoTranspuesto = grafoTranspuesto();
+        ListaAdyacencia<Integer>[] gT = grafoTranspuesto();
 
         for (int i = 0; i < maxNodos; i++) {
             visitado[i] = false;
         }
 
-        int numComponente = 1;
+        
 
         while (!pila.esVacia()) {
             int nodo = pila.desapilar();
 
             if (nombres[nodo] != null && !visitado[nodo]) {
-                printGrafoTranspuesto(nodo, visitado, grafoTranspuesto);
-                numComponente++;
+                ListaAdyacencia <Integer> componente= new ListaAdyacencia<> ();
+                obtenerComponenteDFS(nodo, visitado, gT, componente);
+                //Contar nodos del componente
+                int size = 0;
+                Nodo <Integer> temp = componente.getHead();
+                while (temp != null){
+                    size ++;
+                    temp = temp.getNextNodo();
+                }
+                
+                String colorClass = (size >1) ? "CFC_RED":"NORMAL";
+                
+                temp = componente.getHead();
+                while(temp!= null){
+                    int v = temp.getData();
+                    visualGraph.getNode(nombres[v]).setAttribute("ui.class", colorClass);
+                    temp = temp.getNextNodo();
+                }
+                
             }
         }
     }
+    
 
     
      //no se requieren usar los sets para num vertice y maxnodos al ser una cantidad definida desde el inicio, y no modificable.
@@ -333,33 +402,36 @@ public class Grafo {
    public void mostrarGrafo(){
     System.out.println("Generando representación visual del grafo con GraphStream...");
     
-    // El estilo se corrige aquí, asegurando que todos los bloques estén cerrados correctamente.
     String styleSheet = 
         "graph { fill-color: #f0f0f0; padding: 50px; }" +
         "node {" +
-        "   text-mode: normal;" + 
-        "   text-size: 17px;" + 
-        "   text-color: black;" + // Se añade para mejor contraste en texto grande
+        "   text-mode: normal;" +
+        "   text-size: 17px;" +
+        "   text-color: black;" +
         "   fill-color: #C39EE4; size: 20px;" +
-        "}" + 
-        "edge {" + 
-        "   fill-color: gray;" + 
-        
-        (this.dirigido ? " arrow-size: 8px, 4px;" : "") + 
-        "}"; 
-        
-    this.visualGraph.setAttribute ("ui.stylesheet", styleSheet);
-    this.visualGraph.setAttribute ("ui.quality");
-    this.visualGraph.setAttribute ("ui.antialias");
-    
-    //Muestra la ventana y la lanza en un hilo separado
+        "}" +
+        "node.CFC_RED {" +
+        "   fill-color: red; size:25px; stroke-mode:plain; stroke-color:black; stroke-width:2px;" +
+        "}" +
+        "node.NORMAL {" +
+        "   fill-color: #C39EE4; size:20px;" +
+        "}" +
+        "edge {" +
+        "   fill-color: gray;" +
+        (this.dirigido ? " arrow-size: 8px, 4px;" : "") +
+        "}";
+
+    this.visualGraph.setAttribute("ui.stylesheet", styleSheet);
+    this.visualGraph.setAttribute("ui.quality");
+    this.visualGraph.setAttribute("ui.antialias");
+
     Viewer viewer = this.visualGraph.display();
-    
-    // Aqui se mantiene la ventana oculta al cerrarse, pero sin detener
-    // el programa principal
     viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
     System.out.println("Ventana de grafo mostrada");
-    }
+}
+
+   
+   
    
 }
 
