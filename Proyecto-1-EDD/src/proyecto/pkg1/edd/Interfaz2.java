@@ -166,13 +166,7 @@ public class Interfaz2 extends javax.swing.JFrame {
      * Si el grafo existe, llama al método {@code miGrafo.mostrarGrafo()} para abrir la ventana de visualización
      * @param evt El evento de clic que disparó esta acción.
      */
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        if (miGrafo != null) {
-            miGrafo.mostrarGrafo();
-        } else {
-            JOptionPane.showMessageDialog(this, "Error: El grafo no ha sido cargado.");
-        }
-    }//GEN-LAST:event_jButton4ActionPerformed
+                                          
 /**
      * Maneja el botón "Eliminar Usuario" 
      * Obtiene el usuario
@@ -254,9 +248,19 @@ public class Interfaz2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-
-       miGrafo.mostrarGrafo();
-
+        if (miGrafo != null) {
+            JOptionPane.showMessageDialog(this, 
+            "Los usuarios pertenecientes a componentes fuertemente conectados\n" +
+            "serán mostrados en color ROJO en el grafo. Los demás, en LILA",
+            "Información",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+            miGrafo.mostrarGrafo();
+            miGrafo.componentesFuertementeConectados();
+             } else {
+            JOptionPane.showMessageDialog(this, "Error: El grafo no ha sido cargado.");
+            
+            }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
