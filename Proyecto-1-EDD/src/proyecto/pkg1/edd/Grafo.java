@@ -130,6 +130,9 @@ public class Grafo {
         }
         listaAd[i] = null;  
         nombres [i] = null;
+        if (this.visualGraph.getNode(nom) != null) {
+        this.visualGraph.removeNode(nom);
+        }
     }
  
     
