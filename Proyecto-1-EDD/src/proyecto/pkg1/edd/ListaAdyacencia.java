@@ -243,6 +243,41 @@ public class ListaAdyacencia <T> {
 
         return null; // No encontrado
     }
+    
+    /**
+     * @return the head
+     */
+    public Nodo <T> getHead() {
+        return head;
+    }
+
+    /**
+     * @param head the head to set
+     */
+    public void setHead(Nodo <T> head) {
+        this.head = head;
+    }
+
+    /**
+     * @return the tail
+     */
+    public Nodo <T> getTail() {
+        return tail;
+    }
+
+    /**
+     * @param tail the tail to set
+     */
+    public void setTail(Nodo <T> tail) {
+        this.tail = tail;
+    }
+
+    /**
+     * @param tamaño the tamaño to set
+     */
+    public void setTamaño(int tamaño) {
+        this.tamaño = tamaño;
+    }
 
 
    }

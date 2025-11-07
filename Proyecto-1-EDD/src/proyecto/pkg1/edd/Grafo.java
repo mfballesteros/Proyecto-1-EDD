@@ -163,7 +163,100 @@ public class Grafo {
                 }
         }
 
+    // este metodo se basa en visitiar primero a todos los que conoce y apilar cuando ya no tienes más relaciones por visitar
+    //(el primero que entra es el ultimo que sale)
+    // se utiliza la pila para encontrar todos los elementos completos.
+    private void primeraDFS(int nodo, boolean[] nodosVisitados, Pila pila) {
+        nodosVisitados[nodo] = true; // para qye no lo visite otra vez
     
+    if (listaAd[nodo] != null) {
+        Nodo <Integer> nodoConectado = listaAd[nodo].getHead();
+        
+
+        while (nodoConectado != null) {
+            // Obtiene el índice
+            int vecino = nodoConectado.getData();
+            
+            if (!nodosVisitados[vecino]) {
+                primeraDFS(vecino, nodosVisitados, pila);
+            }
+            nodoConectado = nodoConectado.getNextNodo();
+        }
+    }
+    
+// agrega a la pila
+    pila.apilar(nodo);
+}
+   
+
+
+// ahora transponer el DSF para hallar relaciones, se voltean las relaciones para encontrar sus visitas entre ellos.
+    private ListaAdyacencia<Integer>[] grafoTranspuesto() {
+        ListaAdyacencia<Integer>[] grafoVolteado = new ListaAdyacencia[maxNodos];    
+        for (int i = 0; i < maxNodos; i++) {
+            if (listaAd[i] != null) {
+                Nodo<Integer> actual = listaAd[i].getHead();
+                while (actual != null) {
+                    int j = actual.getData();
+                    if (grafoVolteado[j] == null) {
+                        grafoVolteado[j] = new ListaAdyacencia<>();
+                    }
+                    grafoVolteado[j].insertarFinal(i);
+                    actual = actual.getNextNodo();
+                }
+            }
+        }
+
+        return grafoVolteado;
+    }
+
+//recorremos grafo transpuesto y lo vamos imprimiendo si los usuarios estan relacionados
+    private void printGrafoTranspuesto (int nodo, boolean[] visitado, ListaAdyacencia<Integer>[] grafoTranspuesto) {
+        visitado[nodo] = true;
+        System.out.print(nombres[nodo] + " ");
+
+        if (grafoTranspuesto[nodo] != null) {
+            Nodo<Integer> actual = grafoTranspuesto[nodo].getHead();
+            while (actual != null) {
+                int vecino = actual.getData();
+                if (!visitado[vecino]) {
+                    printGrafoTranspuesto(vecino, visitado, grafoTranspuesto);
+                }
+                actual = actual.getNextNodo();
+            }
+        }
+    }
+    
+//ahora buscamos los componentes, usando los metodos anteriores
+    public void componentesFuertementeConectados() {    
+        if (numVertices == 0) return;
+
+        boolean[] visitado = new boolean[maxNodos];
+        Pila pila = new Pila();
+
+        for (int i = 0; i < maxNodos; i++) {
+            if (nombres[i] != null && !visitado[i]) {
+                primeraDFS(i, visitado, pila);
+            }
+        }
+
+        ListaAdyacencia<Integer>[] grafoTranspuesto = grafoTranspuesto();
+
+        for (int i = 0; i < maxNodos; i++) {
+            visitado[i] = false;
+        }
+
+        int numComponente = 1;
+
+        while (!pila.esVacia()) {
+            int nodo = pila.desapilar();
+
+            if (nombres[nodo] != null && !visitado[nodo]) {
+                printGrafoTranspuesto(nodo, visitado, grafoTranspuesto);
+                numComponente++;
+            }
+        }
+    }
 
     
      //no se requieren usar los sets para num vertice y maxnodos al ser una cantidad definida desde el inicio, y no modificable.

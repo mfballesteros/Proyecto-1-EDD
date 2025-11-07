@@ -21,5 +21,5 @@ public class Proyecto1EDD {
                 new Interfaz().setVisible(true); 
             }
         });
-    }
+    } 
 }
