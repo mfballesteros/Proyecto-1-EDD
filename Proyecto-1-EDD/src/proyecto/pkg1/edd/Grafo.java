@@ -221,6 +221,10 @@ public class Grafo {
     
 }
     
+    /** Metodo que le pone el color de todos los nodos en el grafo visual.
+     * * Se utiliza para limpiar cualquier estilo de antes 
+     */
+    
     private void resetColores(){
        for (int i= 0; i < maxNodos; i ++){
            if ( nombres [i] != null && visualGraph.getNode(nombres[i]) != null){
@@ -230,29 +234,16 @@ public class Grafo {
    }
 
 //recorremos grafo transpuesto y lo vamos imprimiendo si los usuarios estan relacionados
-    private void printGrafoTranspuesto (int nodo, boolean[] visitado, ListaAdyacencia<Integer>[] grafoTranspuesto) {
-        if (nodo < 0 || nodo >= visitado.length || nombres[nodo] == null || visitado[nodo]) {
-        return;
-    }
-        visitado[nodo] = true;
-        String nombreNodo = nombres [nodo];
-        
-        if (this.visualGraph.getNode(nombreNodo) != null){
-            this.visualGraph.getNode(nombreNodo).setAttribute ("ui.class", "CFC_RED");
-        }
-        System.out.print(nombres[nodo] + " ");
 
-        if (grafoTranspuesto[nodo] != null) {
-            Nodo<Integer> actual = grafoTranspuesto[nodo].getHead();
-            while (actual != null) {
-                int vecino = actual.getData();
-                if (nombres[vecino] != null && !visitado[vecino]) {
-                    printGrafoTranspuesto(vecino, visitado, grafoTranspuesto);
-                }
-                actual = actual.getNextNodo();
-            }
-        }
-    }
+    
+    /** Método auxiliar para obtener un componente fuertemente conectado en el grafo transpuesto
+     * Recoore en profundidad esde un nodo dado, marcandolos visitados y agregando
+     * a la lista los que pertenecen al mismo componente
+     * @param nodo
+     * @param visitado
+     * @param gT
+     * @param componente 
+     */
     
     private void obtenerComponenteDFS(int nodo, boolean[] visitado,
                                   ListaAdyacencia<Integer>[] gT,
@@ -374,6 +365,8 @@ public class Grafo {
     /**
  * Recibe listas de datos y construye el grafo llamando a insertarVertice e insertarArista.
  * Esto sincroniza automáticamente con GraphStream.
+ * @param usuarios arreglo que contiene los nombres de los usuarios
+ * @param relaciones arreflo con las relaciones en formato "usuario1, usuario2"
  */
     public void cargarDesdeArchivo(String[] usuarios, String[] relaciones) {
     
@@ -398,6 +391,10 @@ public class Grafo {
     
     System.out.println("Grafo construido y sincronizado. Nodos totales: " + usuarios.length);
 }
+    /** Muestra visualmente el grafo utilizando la libreria GraphStream
+     * Aplica estilos para los nodos y aristas, incuyendo colores, y abre una ventana donde se vera el grafo ctual
+     * Si el grafo contiene CFC estos seran resaltados despues mediante estilos visuales.
+     */
 
    public void mostrarGrafo(){
     System.out.println("Generando representación visual del grafo con GraphStream...");
